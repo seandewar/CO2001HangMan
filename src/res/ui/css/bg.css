@@ -1,0 +1,5 @@
+.root {
+	-fx-background-image: url('../img/bg.png');
+	-fx-background-position: top left;
+	-fx-background-repeat: stretch;
+}

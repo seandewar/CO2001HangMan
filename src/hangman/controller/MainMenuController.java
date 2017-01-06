@@ -3,18 +3,16 @@ package hangman.controller;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import hangman.HangMan;
+import hangman.HangManScreen;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.control.Tooltip;
 
 public class MainMenuController implements Initializable {
 
-  @FXML
-  private Label menuOptionDesc;
   @FXML
   private Button menuOptionNewGame;
   @FXML
@@ -22,35 +20,19 @@ public class MainMenuController implements Initializable {
   
   @Override
   public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
-    updateOptionDescWithTarget(null);
+    menuOptionNewGame.setTooltip(new Tooltip(
+        "Start a new game of hangman at your preferred difficulty level."));
+    menuOptionLoadGame.setTooltip(new Tooltip("Continue playing your last saved game of hangman."));
   }
   
-  private void updateOptionDescWithTarget(Node newTargetOption) {
-    if (newTargetOption == menuOptionNewGame) {
-      menuOptionDesc.setText("Start a new game of hangman at your preferred difficulty level.");
-    } else if (newTargetOption == menuOptionLoadGame) {
-      menuOptionDesc.setText("Continue playing your last saved game of hangman.");
-    } else {
-      menuOptionDesc.setText("Choose an option:");
-    } 
-  }
-
   @FXML
   private void handleMenuOptionNewGameAction(ActionEvent event) {
+    HangMan.getInstance().changeScreen(HangManScreen.NewGame);
   }
 
   @FXML
   private void handleMenuOptionLoadGameAction(ActionEvent event) {
-  }
-
-  @FXML
-  private void handleMenuOptionMouseEntered(MouseEvent event) {
-    updateOptionDescWithTarget((Node)event.getSource());
-  }
-
-  @FXML
-  private void handleMenuOptionMouseExited(MouseEvent event) {
-    updateOptionDescWithTarget(null);
+    // TODO
   }
 
 }

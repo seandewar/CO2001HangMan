@@ -11,6 +11,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Tooltip;
 
 public class NewGameController implements Initializable {
 
@@ -23,9 +24,15 @@ public class NewGameController implements Initializable {
   
   @Override
   public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
-    // Populate difficulty choices
+    // Populate difficulty choices and select the first
     newGameDifficulty.setItems(FXCollections.observableArrayList("Easy (5 letters)",
         "Medium (6 letters)", "Hard (7 letters)", "Expert (8 letters)"));
+    newGameDifficulty.getSelectionModel().selectFirst();
+    
+    newGameDifficulty.setTooltip(new Tooltip(
+        "Change the amount of letters that the words to solve have."));
+    newGameStart.setTooltip(new Tooltip("Start a new game with the selected word difficulty."));
+    newGameMainMenu.setTooltip(new Tooltip("Return to the main menu."));
   }
 
   @FXML

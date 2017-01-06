@@ -70,11 +70,12 @@ public class HangMan extends Application {
   @Override
   public void start(Stage stage) throws IOException {
     this.stage = stage;
+
     stage.setTitle("Sean's Hangman");
     stage.setResizable(false);
-    stage.show();
-
     changeScreen(HangManScreen.MainMenu);
+    stage.sizeToScene();
+    stage.show();
   }
 
 }

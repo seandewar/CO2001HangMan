@@ -1,5 +1,6 @@
 package hangman.controller;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -11,7 +12,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Tooltip;
 
 public class NewGameController implements Initializable {
 
@@ -28,11 +28,6 @@ public class NewGameController implements Initializable {
     newGameDifficulty.setItems(FXCollections.observableArrayList("Easy (5 letters)",
         "Medium (6 letters)", "Hard (7 letters)", "Expert (8 letters)"));
     newGameDifficulty.getSelectionModel().selectFirst();
-    
-    newGameDifficulty.setTooltip(new Tooltip(
-        "Change the amount of letters that the words to solve have."));
-    newGameStart.setTooltip(new Tooltip("Start a new game with the selected word difficulty."));
-    newGameMainMenu.setTooltip(new Tooltip("Return to the main menu."));
   }
 
   @FXML
@@ -41,8 +36,8 @@ public class NewGameController implements Initializable {
   }
 
   @FXML
-  private void handleNewGameMainMenuAction(ActionEvent event) {
-    HangMan.getInstance().changeScreen(HangManScreen.MainMenu);
+  private void handleNewGameMainMenuAction(ActionEvent event) throws IOException {
+    HangMan.getInstance().changeScreen(HangManScreen.MAIN_MENU);
   }
 
 }

@@ -1,5 +1,5 @@
 package hangman;
 
 public enum HangManScreen {
-  MainMenu, NewGame
+  MAIN_MENU, NEW_GAME, GAME
 }

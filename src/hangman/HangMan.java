@@ -1,12 +1,16 @@
 package hangman;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Map;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.TextArea;
 import javafx.stage.Stage;
 
 public class HangMan extends Application {
@@ -17,6 +21,10 @@ public class HangMan extends Application {
   private Map<String, Scene> loadedScreenScenes;
   
   public static HangMan getInstance() {
+    if (instance == null) {
+      instance = new HangMan();
+    }
+
     return instance;
   }
   
@@ -25,8 +33,10 @@ public class HangMan extends Application {
   }
 
   public HangMan() {
-    instance = this;
     loadedScreenScenes = new HashMap<String, Scene>();
+    if (instance == null) {
+      instance = this;
+    }
   }
   
   public Stage getStage() {
@@ -36,7 +46,7 @@ public class HangMan extends Application {
   private void handleScreenChange(String fxmlResourceName) throws IOException {
     Scene screenScene = loadedScreenScenes.get(fxmlResourceName);
     if (screenScene == null) {
-      // This screen hasn't been loaded yet
+      // This screen hasn't been loaded yet - load and cache it now
       screenScene = new Scene(FXMLLoader.load(getClass().getResource(fxmlResourceName)));
       loadedScreenScenes.put(fxmlResourceName, screenScene);
     }
@@ -44,38 +54,59 @@ public class HangMan extends Application {
     stage.setScene(screenScene);
   }
 
-  public void changeScreen(HangManScreen screen) throws UnsupportedOperationException {
+  public void changeScreen(HangManScreen screen) throws UnsupportedOperationException, IOException {
     String targetFxmlResourceName = "";
 
     switch (screen) {
-      case MainMenu:
+      case MAIN_MENU:
         targetFxmlResourceName = "/res/ui/fxml/menu.fxml";
         break;
         
-      case NewGame:
+      case NEW_GAME:
         targetFxmlResourceName = "/res/ui/fxml/newgame.fxml";
+        break;
+        
+      case GAME:
+        targetFxmlResourceName = "/res/ui/fxml/game.fxml";
         break;
         
       default:
         throw new UnsupportedOperationException("Unsupported screen " + screen.toString());
     }
     
-    try {
-      handleScreenChange(targetFxmlResourceName);
-    } catch (IOException e) {
-      // TODO Error Message
-    }
+    handleScreenChange(targetFxmlResourceName);
   }
   
   @Override
-  public void start(Stage stage) throws IOException {
-    this.stage = stage;
+  public void start(Stage stage) {
+    try {
+      this.stage = stage;
 
-    stage.setTitle("Sean's Hangman");
-    stage.setResizable(false);
-    changeScreen(HangManScreen.MainMenu);
-    stage.sizeToScene();
-    stage.show();
+      stage.setTitle("Sean's Hangman");
+      stage.setResizable(false);
+      changeScreen(HangManScreen.MAIN_MENU);
+      stage.sizeToScene();
+      stage.show();
+    } catch (Exception e) {
+      // Exception not handled - if it has reached here it's fatal!
+      Alert alert = new Alert(AlertType.ERROR);
+      alert.setTitle("Sean's Hangman - Fatal Error");
+      alert.setContentText("A fatal error occurred within the application. "
+          + "Please make sure none of the game's files are missing or corrupt and try running the "
+          + "application again.");
+      
+      // Exception stack trace info for alert dialog
+      StringWriter sw = new StringWriter();
+      e.printStackTrace(new PrintWriter(sw));
+      
+      TextArea detailsTextArea = new TextArea(sw.toString());
+      detailsTextArea.setWrapText(true);
+      detailsTextArea.setEditable(true);
+      alert.getDialogPane().setExpandableContent(detailsTextArea);
+
+      alert.showAndWait();
+      System.exit(1); // Exit with an error status
+    }
   }
 
 }
